@@ -1,26 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ziggy | Sales Engineer @ Delinea</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  <meta name="description" content="Ziggy — Sales Engineer at Delinea. Bridging the gap between cybersecurity and business, one demo at a time." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Brand tokens ──────────────────────────────── */
     :root {
-      --delinea-purple: #231556;
+      --delinea-purple:   #231556;
       --delinea-midnight: #0C102A;
-      --delinea-green: #00FF59;
-      --delinea-cyan: #00FFD1;
+      --delinea-green:    #00FF59;
+      --delinea-cyan:     #00FFD1;
       --delinea-sky-blue: #56BAF6;
-      --delinea-gray: #888B8D;
       --font: 'Arial', sans-serif;
     }
 
+    /* ── Dark theme (default) ──────────────────────── */
+    :root, [data-theme="dark"] {
+      --bg:                var(--delinea-midnight);
+      --bg-radial:         radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.07) 0%, var(--delinea-midnight) 70%);
+      --text:              #ffffff;
+      --text-muted:        rgba(255,255,255,0.7);
+      --text-footer:       rgba(255,255,255,0.25);
+      --logo-color:        #ffffff;
+      --card-bg:           rgba(255,255,255,0.05);
+      --card-border:       rgba(255,255,255,0.08);
+      --card-hover-bg:     rgba(255,255,255,0.10);
+      --card-hover-border: rgba(0,255,89,0.4);
+      --card-hover-shadow: rgba(0,255,89,0.18);
+      --toggle-bg:         rgba(255,255,255,0.08);
+      --toggle-border:     rgba(255,255,255,0.15);
+      --toggle-color:      rgba(255,255,255,0.75);
+      --toggle-hover-bg:   rgba(255,255,255,0.15);
+    }
+
+    /* ── Light theme ───────────────────────────────── */
+    [data-theme="light"] {
+      --bg:                #f3f2fa;
+      --bg-radial:         radial-gradient(ellipse at 50% 20%, rgba(35,21,86,0.09) 0%, #f3f2fa 70%);
+      --text:              #0C102A;
+      --text-muted:        rgba(12,16,42,0.62);
+      --text-footer:       rgba(12,16,42,0.3);
+      --logo-color:        #231556;
+      --card-bg:           rgba(255,255,255,0.72);
+      --card-border:       rgba(12,16,42,0.09);
+      --card-hover-bg:     #ffffff;
+      --card-hover-border: rgba(0,180,65,0.45);
+      --card-hover-shadow: rgba(35,21,86,0.12);
+      --toggle-bg:         rgba(12,16,42,0.07);
+      --toggle-border:     rgba(12,16,42,0.14);
+      --toggle-color:      rgba(12,16,42,0.65);
+      --toggle-hover-bg:   rgba(12,16,42,0.13);
+    }
+
+    /* ── Base ──────────────────────────────────────── */
     body {
       font-family: var(--font);
       min-height: 100vh;
@@ -28,12 +66,67 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.07) 0%, var(--delinea-midnight) 70%);
-      background-color: var(--delinea-midnight);
-      color: #ffffff;
+      background: var(--bg-radial);
+      background-color: var(--bg);
+      color: var(--text);
       padding: 2rem 1rem;
+      transition: background-color 0.35s ease, color 0.35s ease;
     }
 
+    /* ── Theme toggle ──────────────────────────────── */
+    .theme-toggle {
+      position: fixed;
+      top: 1.1rem;
+      right: 1.1rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      color: var(--toggle-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.25s, border-color 0.35s;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 100;
+    }
+    .theme-toggle:hover {
+      background: var(--toggle-hover-bg);
+      transform: scale(1.12) rotate(18deg);
+    }
+    .theme-toggle svg { width: 18px; height: 18px; }
+
+    /* Show sun in dark → click to go light; moon in light → click to go dark */
+    [data-theme="dark"]  .icon-sun  { display: block; }
+    [data-theme="dark"]  .icon-moon { display: none;  }
+    [data-theme="light"] .icon-sun  { display: none;  }
+    [data-theme="light"] .icon-moon { display: block; }
+
+    /* ── Entrance animations ───────────────────────── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    .anim {
+      opacity: 0;
+      animation: fadeSlideUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .d1  { animation-delay: 0.05s; }
+    .d2  { animation-delay: 0.13s; }
+    .d3  { animation-delay: 0.20s; }
+    .d4  { animation-delay: 0.27s; }
+    .d5  { animation-delay: 0.34s; }
+    .d6  { animation-delay: 0.41s; }
+    .d7  { animation-delay: 0.48s; }
+    .d8  { animation-delay: 0.55s; }
+    .d9  { animation-delay: 0.62s; }
+    .d10 { animation-delay: 0.69s; }
+
+    /* ── Card layout ───────────────────────────────── */
     .card {
       width: 100%;
       max-width: 480px;
@@ -43,16 +136,14 @@
       gap: 1.5rem;
     }
 
-    /* Logo */
+    /* ── Logo ──────────────────────────────────────── */
     .logo-wrap {
-      opacity: 0.9;
+      color: var(--logo-color);
+      transition: color 0.35s;
     }
-    .logo-wrap svg {
-      width: 140px;
-      height: auto;
-    }
+    .logo-wrap svg { width: 140px; height: auto; }
 
-    /* Divider */
+    /* ── Divider ───────────────────────────────────── */
     .divider {
       width: 48px;
       height: 3px;
@@ -60,7 +151,7 @@
       border-radius: 2px;
     }
 
-    /* Avatar / Initials */
+    /* ── Avatar ────────────────────────────────────── */
     .avatar {
       width: 88px;
       height: 88px;
@@ -74,19 +165,18 @@
       font-weight: 700;
       color: var(--delinea-green);
       letter-spacing: 1px;
-      box-shadow: 0 0 24px rgba(0, 255, 89, 0.25);
+      box-shadow: 0 0 26px rgba(0,255,89,0.28);
     }
 
-    /* Name & title */
-    .identity {
-      text-align: center;
-    }
+    /* ── Identity ──────────────────────────────────── */
+    .identity { text-align: center; }
     .identity h1 {
       font-size: 2rem;
       font-weight: 700;
       letter-spacing: 0.5px;
-      color: #ffffff;
+      color: var(--text);
       line-height: 1.1;
+      transition: color 0.35s;
     }
     .identity .role {
       margin-top: 0.35rem;
@@ -97,16 +187,17 @@
       letter-spacing: 1.5px;
     }
 
-    /* Tagline */
+    /* ── Tagline ───────────────────────────────────── */
     .tagline {
       text-align: center;
       font-size: 1rem;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--text-muted);
       line-height: 1.6;
       max-width: 360px;
+      transition: color 0.35s;
     }
 
-    /* Link buttons */
+    /* ── Link buttons ──────────────────────────────── */
     .links {
       width: 100%;
       display: flex;
@@ -123,37 +214,37 @@
       text-decoration: none;
       font-size: 0.95rem;
       font-weight: 600;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.05);
-      color: #ffffff;
+      color: var(--text);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       position: relative;
       overflow: hidden;
+      transition:
+        transform      0.20s ease,
+        box-shadow     0.20s ease,
+        background     0.20s ease,
+        border-color   0.20s ease,
+        color          0.35s;
     }
 
+    /* Shimmer sweep on hover */
     .link-btn::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+      background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%);
       opacity: 0;
-      transition: opacity 0.2s;
+      transition: opacity 0.25s;
     }
 
     .link-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(0, 255, 89, 0.15);
-      background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(0, 255, 89, 0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px var(--card-hover-shadow);
+      background: var(--card-hover-bg);
+      border-color: var(--card-hover-border);
     }
-
-    .link-btn:hover::before {
-      opacity: 1;
-    }
-
-    .link-btn:active {
-      transform: translateY(0);
-    }
+    .link-btn:hover::before { opacity: 1; }
+    .link-btn:active { transform: translateY(-1px); }
 
     .link-btn .icon {
       width: 36px;
@@ -164,86 +255,100 @@
       justify-content: center;
       flex-shrink: 0;
     }
-
-    .link-btn .icon svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .link-btn .label {
-      flex: 1;
-    }
-
-    .link-btn .arrow {
-      color: rgba(255,255,255,0.3);
+    .link-btn .icon svg { width: 20px; height: 20px; }
+    .link-btn .label  { flex: 1; }
+    .link-btn .arrow  {
       font-size: 1.1rem;
+      color: rgba(128,128,128,0.45);
       transition: color 0.15s, transform 0.15s;
     }
-
     .link-btn:hover .arrow {
       color: var(--delinea-green);
-      transform: translateX(3px);
+      transform: translateX(4px);
     }
 
-    /* Button accent colors */
-    .btn-calendar .icon {
-      background: rgba(0, 255, 89, 0.15);
-      color: var(--delinea-green);
-    }
-    .btn-linkedin .icon {
-      background: rgba(86, 186, 246, 0.15);
-      color: var(--delinea-sky-blue);
-    }
-    .btn-company .icon {
-      background: rgba(0, 255, 209, 0.12);
-      color: var(--delinea-cyan);
-    }
+    /* Button accent colours */
+    .btn-calendar .icon { background: rgba(0,255,89,0.14);   color: var(--delinea-green);    }
+    .btn-linkedin .icon { background: rgba(86,186,246,0.14); color: var(--delinea-sky-blue); }
+    .btn-company  .icon { background: rgba(0,255,209,0.11);  color: var(--delinea-cyan);     }
 
-    /* Footer */
+    /* ── Footer ────────────────────────────────────── */
     .footer {
       margin-top: 1rem;
       font-size: 0.75rem;
-      color: rgba(255,255,255,0.25);
+      color: var(--text-footer);
       text-align: center;
+      transition: color 0.35s;
     }
   </style>
 </head>
 <body>
+
+  <!-- ── Theme toggle ──────────────────────────────── -->
+  <button class="theme-toggle anim d1" id="themeToggle"
+          aria-label="Toggle colour theme" title="Switch theme">
+    <!-- Sun: visible in dark mode — click to go light -->
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1"  x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22"  y1="4.22"  x2="5.64"  y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1"  y1="12" x2="3"  y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36"/>
+      <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+    </svg>
+    <!-- Moon: visible in light mode — click to go dark -->
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+
+  <!-- ── Main card ──────────────────────────────────── -->
   <div class="card">
 
     <!-- Delinea Logo -->
-    <div class="logo-wrap">
+    <div class="logo-wrap anim d2">
       <svg viewBox="0 0 1179 268" xmlns="http://www.w3.org/2000/svg" aria-label="Delinea">
-        <path d="M46.7 217.3 3.2 217.3 3.2 42.7 46.6 42.7 46.6 217.3ZM408.4 173.7 270 173.7C273 203.2 288.7 222.8 319.3 222.8 340.2 222.8 355.7 213.4 364.1 195.5L406.2 208.3C391.3 243.5 357.9 262.8 321.8 262.8 262.8 262.8 224.2 221.4 224.2 164 224.2 98.7 265.4 60.9 319.3 60.9 381.8 60.9 413 108.7 408.4 173.7ZM365.1 141.5C361.8 113.8 349.4 98.3 321.1 98.3 292.8 98.3 276.2 112.3 271 141.5L365.1 141.5ZM952.2 173.7 813.8 173.7C816.8 203.2 832.5 222.8 863.1 222.8 884 222.8 899.5 213.4 907.9 195.5L950 208.3C935.1 243.5 901.7 262.8 865.6 262.8 806.6 262.8 768 221.4 768 164 768 98.7 809.2 60.9 863.1 60.9 925.6 60.9 956.8 108.7 952.2 173.7ZM908.9 141.5C905.6 113.8 893.2 98.3 864.9 98.3 836.6 98.3 820 112.3 814.8 141.5L908.9 141.5ZM427.5 257.5 470.2 257.5 470.2 2.5 427.5 2.5 427.5 257.5ZM501.2 257.5 543.8 257.5 543.8 66.2 501.2 66.2 501.2 257.5ZM501.2 47.2 543.8 47.2 543.8 2.5 501.2 2.5 501.2 47.2ZM675.4 60.9C650.3 60.9 629.3 70.6 612.9 92L612.9 66.2 574.8 66.2 574.8 257.4 618 257.4 618 159.2C618 126.5 630.1 100.9 662.8 100.9 698.2 100.9 707.4 130.3 707.4 165.4L707.4 257.4 750.6 257.4 750.6 150.7C750.6 104.2 732 60.9 675.4 60.9ZM1134.2 140.1 1134.2 257.5 1096.8 257.5 1096.8 231.7C1079.5 254.5 1058.2 262.8 1029.6 262.8 988.4 262.8 965.5 236.8 965.5 205.1 965.5 175.7 980.5 157.5 1009.1 147.9 1034 140 1065.5 136.4 1092.3 132.4 1090.5 108.3 1077.2 100.2 1053.2 100.2 1037.9 100.2 1017.3 106.5 1011.4 126.9L972.4 114.7C977.2 98.6 986.1 85.6 999.4 75.8 1012.7 66 1030.6 61.1 1053.1 61.1 1113.5 61.1 1130.7 94.6 1133 117.4 1133.9 124.2 1134.2 131.8 1134.2 140.1ZM1091.9 167.3C1077.8 169.5 1063.5 171.8 1048.2 174.8 1029.3 178.6 1007.5 185.1 1007.5 204.4 1007.5 217.3 1016.9 228.7 1038.3 228.7 1069.8 228.7 1090.3 207.6 1091.5 178.3 1091.7 174.2 1091.9 167.3 1091.9 167.3ZM97.2 2.5 46.7 2.5 46.7 42.7C46.7 42.7 69.3 42.6 84.6 42.7 96.9 42.8 104 42.7 112.7 44.6 150.1 51.7 164.3 91.7 164.3 130 164.3 168.3 150.1 208.2 112.7 215.4 104.1 217.3 96.9 217.3 84.6 217.3 69.2 217.4 46.7 217.3 46.7 217.3L46.7 257.5 97.2 257.5C179.9 257.5 209.4 189.7 209.4 130 209.4 70.3 179.8 2.5 97.2 2.5Z" fill="#FFFFFF"/>
+        <path d="M46.7 217.3 3.2 217.3 3.2 42.7 46.6 42.7 46.6 217.3ZM408.4 173.7 270 173.7C273 203.2 288.7 222.8 319.3 222.8 340.2 222.8 355.7 213.4 364.1 195.5L406.2 208.3C391.3 243.5 357.9 262.8 321.8 262.8 262.8 262.8 224.2 221.4 224.2 164 224.2 98.7 265.4 60.9 319.3 60.9 381.8 60.9 413 108.7 408.4 173.7ZM365.1 141.5C361.8 113.8 349.4 98.3 321.1 98.3 292.8 98.3 276.2 112.3 271 141.5L365.1 141.5ZM952.2 173.7 813.8 173.7C816.8 203.2 832.5 222.8 863.1 222.8 884 222.8 899.5 213.4 907.9 195.5L950 208.3C935.1 243.5 901.7 262.8 865.6 262.8 806.6 262.8 768 221.4 768 164 768 98.7 809.2 60.9 863.1 60.9 925.6 60.9 956.8 108.7 952.2 173.7ZM908.9 141.5C905.6 113.8 893.2 98.3 864.9 98.3 836.6 98.3 820 112.3 814.8 141.5L908.9 141.5ZM427.5 257.5 470.2 257.5 470.2 2.5 427.5 2.5 427.5 257.5ZM501.2 257.5 543.8 257.5 543.8 66.2 501.2 66.2 501.2 257.5ZM501.2 47.2 543.8 47.2 543.8 2.5 501.2 2.5 501.2 47.2ZM675.4 60.9C650.3 60.9 629.3 70.6 612.9 92L612.9 66.2 574.8 66.2 574.8 257.4 618 257.4 618 159.2C618 126.5 630.1 100.9 662.8 100.9 698.2 100.9 707.4 130.3 707.4 165.4L707.4 257.4 750.6 257.4 750.6 150.7C750.6 104.2 732 60.9 675.4 60.9ZM1134.2 140.1 1134.2 257.5 1096.8 257.5 1096.8 231.7C1079.5 254.5 1058.2 262.8 1029.6 262.8 988.4 262.8 965.5 236.8 965.5 205.1 965.5 175.7 980.5 157.5 1009.1 147.9 1034 140 1065.5 136.4 1092.3 132.4 1090.5 108.3 1077.2 100.2 1053.2 100.2 1037.9 100.2 1017.3 106.5 1011.4 126.9L972.4 114.7C977.2 98.6 986.1 85.6 999.4 75.8 1012.7 66 1030.6 61.1 1053.1 61.1 1113.5 61.1 1130.7 94.6 1133 117.4 1133.9 124.2 1134.2 131.8 1134.2 140.1ZM1091.9 167.3C1077.8 169.5 1063.5 171.8 1048.2 174.8 1029.3 178.6 1007.5 185.1 1007.5 204.4 1007.5 217.3 1016.9 228.7 1038.3 228.7 1069.8 228.7 1090.3 207.6 1091.5 178.3 1091.7 174.2 1091.9 167.3 1091.9 167.3ZM97.2 2.5 46.7 2.5 46.7 42.7C46.7 42.7 69.3 42.6 84.6 42.7 96.9 42.8 104 42.7 112.7 44.6 150.1 51.7 164.3 91.7 164.3 130 164.3 168.3 150.1 208.2 112.7 215.4 104.1 217.3 96.9 217.3 84.6 217.3 69.2 217.4 46.7 217.3 46.7 217.3L46.7 257.5 97.2 257.5C179.9 257.5 209.4 189.7 209.4 130 209.4 70.3 179.8 2.5 97.2 2.5Z"
+              fill="currentColor"/>
       </svg>
     </div>
 
-    <div class="divider"></div>
+    <div class="divider anim d3"></div>
 
     <!-- Avatar -->
-    <div class="avatar">Z</div>
+    <div class="avatar anim d4">Z</div>
 
     <!-- Name & Role -->
-    <div class="identity">
+    <div class="identity anim d5">
       <h1>Ziggy</h1>
-      <div class="role">Sales Engineer</div>
+      <div class="role">Sales Engineer &middot; Delinea</div>
     </div>
 
     <!-- Tagline -->
-    <p class="tagline">Bridging the gap between cybersecurity and business&nbsp;&mdash; one demo at a time.</p>
+    <p class="tagline anim d6">
+      Bridging the gap between cybersecurity and business&nbsp;&mdash; one demo at a time.
+    </p>
 
     <!-- Links -->
     <div class="links">
 
       <!-- Calendly -->
-      <a class="link-btn btn-calendar" href="https://calendly.com" target="_blank" rel="noopener noreferrer">
+      <a class="link-btn btn-calendar anim d7"
+         href="https://calendly.com" target="_blank" rel="noopener noreferrer">
         <span class="icon">
-          <!-- Calendar icon -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
             <line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8" y1="2" x2="8" y2="6"/>
-            <line x1="3" y1="10" x2="21" y2="10"/>
+            <line x1="8"  y1="2" x2="8"  y2="6"/>
+            <line x1="3"  y1="10" x2="21" y2="10"/>
           </svg>
         </span>
         <span class="label">Book a Meeting</span>
@@ -251,9 +356,9 @@
       </a>
 
       <!-- LinkedIn -->
-      <a class="link-btn btn-linkedin" href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+      <a class="link-btn btn-linkedin anim d8"
+         href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
         <span class="icon">
-          <!-- LinkedIn icon -->
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
             <rect x="2" y="9" width="4" height="12"/>
@@ -265,10 +370,11 @@
       </a>
 
       <!-- Delinea -->
-      <a class="link-btn btn-company" href="https://delinea.com" target="_blank" rel="noopener noreferrer">
+      <a class="link-btn btn-company anim d9"
+         href="https://delinea.com" target="_blank" rel="noopener noreferrer">
         <span class="icon">
-          <!-- Globe / company icon -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
             <line x1="2" y1="12" x2="22" y2="12"/>
             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -280,7 +386,23 @@
 
     </div>
 
-    <p class="footer">&copy; 2026 Ziggy &middot; Delinea</p>
+    <p class="footer anim d10">&copy; 2026 Ziggy &middot; Delinea</p>
   </div>
+
+  <script>
+    // ── Theme toggle with localStorage persistence ────
+    const html = document.documentElement;
+    const btn  = document.getElementById('themeToggle');
+
+    // Apply saved preference synchronously (avoids flash-of-wrong-theme)
+    const saved = localStorage.getItem('ziggy-theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+
+    btn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('ziggy-theme', next);
+    });
+  </script>
 </body>
 </html>

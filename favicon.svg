@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background tile: Delinea deep purple with rounded corners -->
+  <rect width="32" height="32" rx="7" fill="#231556"/>
+  <!-- Green accent bar along the bottom edge -->
+  <rect x="5" y="26" width="22" height="3" rx="1.5" fill="#00FF59"/>
+  <!-- "Z" glyph drawn as a path for crisp rendering at small sizes -->
+  <path d="M8 7 h14 l-12 13 h13" stroke="#FFFFFF" stroke-width="2.6"
+        stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
